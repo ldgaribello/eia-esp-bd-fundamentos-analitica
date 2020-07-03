@@ -1,4 +1,4 @@
-setwd("~/Workspace/Study/Fundamentos Analitica/playground")
+setwd("~/Workspace/Study/Fundamentos Analitica/clase_3")
 
 #### Load libraries  ####
 

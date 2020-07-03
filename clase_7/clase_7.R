@@ -53,7 +53,7 @@ iris.c$Sepal.Width <- cut(iris.c$Sepal.Width,
                           c(0, mean(iris$Sepal.Width), Inf),
                           labels = c("Low", "High"))
 
-iris.c.train <- iris.c[index.train, ] 
+iris.c.train <- iris.c[ index.train, ] 
 iris.c.test  <- iris.c[-index.train, ]
 
 # Algoritmo

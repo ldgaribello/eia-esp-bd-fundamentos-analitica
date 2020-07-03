@@ -1,6 +1,7 @@
 setwd("~/Workspace/Study/Fundamentos Analitica/clase_5")
 getwd()
 
+
 #### Load libraries  ####
 library(fastDummies)
 library(plyr)
@@ -13,6 +14,19 @@ library(Hmisc)
 library(pastecs)
 # install.packages("psych")
 library(psych)
+
+library(sm)
+
+# install.packages("car")
+# install.packages("zip")
+library(car)
+
+# install.packages("caTools")
+library(gplots)
+
+library(lattice)
+
+library(corrplot)
 
 ####   Load data     ####
 data("mtcars")
@@ -47,8 +61,8 @@ summary(x$mpg[x["cyl"] == 4])
 summary(x$mpg[x["cyl"] == 6])
 summary(x$mpg[x["cyl"] == 8])
 
+cyl.f <- as.factor(x$cyl)
 cyl.dummies <-  dummy_cols(as.factor(x$cyl))
-
 
 
 
@@ -76,7 +90,8 @@ plot(x$mpg, x$hp, xlab = "MPG", ylab = "HP",
      fg = "yellow4")
 
 hist(mtcars$mpg)
-hist(mtcars$mpg, breaks = 10)
+hist(mtcars$mpg, cex.main = 1.2, cex.axis = 0.9)
+hist(mtcars$mpg, breaks = 10, col = heat.colors(5))
 
 mpg_density = density(mtcars$mpg)
 plot(mpg_density)
@@ -125,6 +140,44 @@ prop.table(table_am_vs, 1)
 # h0 = independnecia
 # p-valor 0,05
 chisq.test(table_am_vs)
+
+boxplot(mtcars$mpg ~ mtcars$cyl,
+        data = mtcars,
+        main = "Cars Milage Data",
+        xlab = "Number of Cylinders",
+        ylab = "Miles per Gallon")
+
+sm.density.compare(mtcars$mpg, mtcars$cyl, 
+                   xlab = "Miles Per Gallon")
+colfill <- c(2: (2 + length(levels(as.factor(mtcars$cyl)))))
+legend("topright", 
+       locator(1), 
+       levels(as.factor(mtcars$cyl)),
+       fill = colfill)
+
+lattice::densityplot(mtcars$mpg)
+lattice::densityplot(mtcars$mpg | mtcars$cyl.f)
+
+plot(mtcars$wt, mtcars$mpg,
+     main = "Scatterplot",
+     xlab = "Car Weight",
+     ylab = "Miles Per Gallon")
+abline(lm(mtcars$mpg ~ mtcars$wt), col="red")
+lines(lowess(mtcars$wt, mtcars$mpg), col="blue")
+
+cor(mtcars[,1:4], use = "complete.obs")
+cor(mtcars[,1:4], use = "complete.obs", method = "kendall")
+
+car::scatterplot(mtcars$mpg ~ mtcars$wt | mtcars$cyl)
+
+pairs(~mpg+disp+drat+wt, data = mtcars)
+psych::pairs.panels(mtcars[,1:4])
+
+gplots::plotmeans(mtcars$mpg ~ mtcars$cyl)
+
+M <-  cor(mtcars)
+corrplot(M, method = "circle")
+?corrplot
 
 ####     Results     ####
 
